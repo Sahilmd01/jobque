@@ -48,7 +48,7 @@ const JobListing = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gray-900 overflow-hidden">
+    <div id="job-listings" className="relative min-h-screen bg-gray-900 overflow-hidden">
       {/* Background elements matching Hero section */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-10 -right-1/2 transform-gpu blur-3xl">

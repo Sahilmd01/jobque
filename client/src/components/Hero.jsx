@@ -25,6 +25,14 @@ const Hero = () => {
       location: locationRef.current.value
     })
     setIsSearched(true);
+    
+    // Scroll to job listings after a small delay
+    setTimeout(() => {
+      const element = document.getElementById('job-listings');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   }
 
   // Animation effect for logos
