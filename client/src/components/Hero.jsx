@@ -1,12 +1,22 @@
 import React, { useContext, useRef, useEffect } from 'react'
 import { assets } from '../assets/assets'
 import { AppContext } from '../context/AppContext'
+import { motion, useAnimation, useInView } from 'framer-motion'
 
 const Hero = () => {
   const { setSearchFilter, setIsSearched } = useContext(AppContext)
   const titleRef = useRef(null)
   const locationRef = useRef(null)
   const logosContainerRef = useRef(null)
+  const mainRef = useRef(null)
+  const isInView = useInView(mainRef, { once: true, amount: 0.1 })
+  const controls = useAnimation()
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible")
+    }
+  }, [isInView, controls])
 
   const onSearch = (e) => {
     e.preventDefault();
@@ -40,8 +50,37 @@ const Hero = () => {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  }
+
+  const fadeInVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.8 } }
+  }
+
   return (
-    <div className="bg-gray-900">
+    <div className="bg-gray-900" ref={mainRef}>
       {/* Main Hero Section */}
       <div className="relative isolate overflow-hidden py-24 sm:py-32">
         {/* Abstract background pattern */}
@@ -56,18 +95,23 @@ const Hero = () => {
           />
         </div>
 
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
+        <motion.div 
+          className="mx-auto max-w-7xl px-6 lg:px-8"
+          initial="hidden"
+          animate={controls}
+          variants={containerVariants}
+        >
+          <motion.div className="mx-auto max-w-3xl text-center" variants={itemVariants}>
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
               Launch Your <span className="text-indigo-400">Dream Career</span> Today
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300">
               Join 10,000+ professionals who found their perfect match through our AI-powered job platform.
             </p>
-          </div>
+          </motion.div>
 
           {/* Modern search form */}
-          <div className="mx-auto mt-16 max-w-2xl">
+          <motion.div className="mx-auto mt-16 max-w-2xl" variants={itemVariants}>
             <form onSubmit={onSearch} className="space-y-4">
               <div className="flex flex-col gap-4 sm:flex-row">
                 <div className="relative flex-auto">
@@ -97,37 +141,54 @@ const Hero = () => {
                     placeholder="Location or remote"
                   />
                 </div>
-                <button
+                <motion.button
                   type="submit"
                   className="flex-none rounded-lg bg-indigo-600 px-6 py-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center gap-2"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   Find Jobs
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                </button>
+                </motion.button>
               </div>
             </form>
-          </div>
+          </motion.div>
 
           {/* Stats */}
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <motion.div 
+            className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+            variants={containerVariants}
+          >
             {[
               { name: 'Jobs available', value: '10,000+' },
               { name: 'Companies hiring', value: '5,000+' },
               { name: 'Career matches', value: '15,000+' },
-            ].map((stat) => (
-              <div key={stat.name} className="flex flex-col gap-y-3 rounded-xl bg-white/5 p-6 backdrop-blur-sm">
+            ].map((stat, index) => (
+              <motion.div 
+                key={stat.name} 
+                className="flex flex-col gap-y-3 rounded-xl bg-white/5 p-6 backdrop-blur-sm"
+                variants={itemVariants}
+                whileHover={{ y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
                 <div className="text-3xl font-bold tracking-tight text-white">{stat.value}</div>
                 <div className="text-sm leading-6 text-gray-300">{stat.name}</div>
-              </div>
+              </motion.div>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Trusted By Section */}
-      <div className="bg-gray-900 py-12">
+      <motion.div 
+        className="bg-gray-900 py-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={fadeInVariants}
+      >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="rounded-2xl bg-gray-800 p-8 shadow-xl">
             <p className="text-center text-gray-400 font-medium mb-8 text-sm uppercase tracking-wider">
@@ -152,24 +213,43 @@ const Hero = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Features Section */}
-      <div className="bg-gray-900 py-16">
+      <motion.div 
+        className="bg-gray-900 py-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={fadeInVariants}
+      >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900 p-12 shadow-2xl">
-            <div className="text-center mb-16">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
               <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Why <span className="text-indigo-400">Choose Us</span>?
               </h2>
               <p className="mt-4 text-lg leading-8 text-gray-400 max-w-2xl mx-auto">
                 We're revolutionizing the job search experience with cutting-edge technology and personalized service
               </p>
-            </div>
+            </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Curated Jobs */}
-              <div className="rounded-xl bg-gray-800 p-6 hover:bg-gray-700 transition-all duration-300 group">
+              <motion.div 
+                className="rounded-xl bg-gray-800 p-6 hover:bg-gray-700 transition-all duration-300 group"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                whileHover={{ scale: 1.03 }}
+              >
                 <div className="flex items-center mb-4">
                   <div className="bg-indigo-500/10 p-3 rounded-lg mr-4 group-hover:bg-indigo-500/20 transition-colors">
                     <svg className="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,10 +261,17 @@ const Hero = () => {
                 <p className="text-gray-400">
                   Our team hand-picks only the highest quality opportunities from verified employers, saving you time and effort.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Fast Results */}
-              <div className="rounded-xl bg-gray-800 p-6 hover:bg-gray-700 transition-all duration-300 group">
+              <motion.div 
+                className="rounded-xl bg-gray-800 p-6 hover:bg-gray-700 transition-all duration-300 group"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                whileHover={{ scale: 1.03 }}
+              >
                 <div className="flex items-center mb-4">
                   <div className="bg-indigo-500/10 p-3 rounded-lg mr-4 group-hover:bg-indigo-500/20 transition-colors">
                     <svg className="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -196,10 +283,17 @@ const Hero = () => {
                 <p className="text-gray-400">
                   Our advanced matching algorithm connects you with the most relevant jobs in seconds, not weeks.
                 </p>
-              </div>
+              </motion.div>
 
               {/* No Hidden Fees */}
-              <div className="rounded-xl bg-gray-800 p-6 hover:bg-gray-700 transition-all duration-300 group">
+              <motion.div 
+                className="rounded-xl bg-gray-800 p-6 hover:bg-gray-700 transition-all duration-300 group"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                whileHover={{ scale: 1.03 }}
+              >
                 <div className="flex items-center mb-4">
                   <div className="bg-indigo-500/10 p-3 rounded-lg mr-4 group-hover:bg-indigo-500/20 transition-colors">
                     <svg className="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,11 +305,11 @@ const Hero = () => {
                 <p className="text-gray-400">
                   Complete transparency - no surprise charges or premium paywalls. All features are available to all users.
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
