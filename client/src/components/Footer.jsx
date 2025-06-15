@@ -34,15 +34,22 @@ const Footer = () => {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       variants={containerVariants}
-      className="bg-gradient-to-b from-gray-900 to-gray-800 text-white pt-16 pb-8 px-4"
+      className="bg-gray-900 text-white pt-16 pb-8 px-4 relative overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto">
+      {/* Abstract background elements matching the Hero */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-blue-400 rounded-full filter blur-[80px] opacity-20"></div>
+        <div className="absolute bottom-10 right-10 w-80 h-80 bg-indigo-400 rounded-full filter blur-[80px] opacity-20"></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-400 rounded-full filter blur-[100px] opacity-10"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Column 1 - Logo and description */}
           <motion.div variants={itemVariants}>
             <motion.div 
               whileHover={{ scale: 1.03 }}
-              className="bg-white p-3 rounded-lg inline-block mb-6 shadow-lg"
+              className="bg-gray-800 p-3 rounded-lg inline-block mb-6 shadow-lg border border-gray-700"
             >
               <img width={180} src={assets.logo} alt="InsiderJobs" className="h-10 object-contain" />
             </motion.div>
@@ -59,9 +66,9 @@ const Footer = () => {
                 <motion.a
                   key={index}
                   href="#"
-                  whileHover={{ y: -3, color: "#3B82F6" }}
+                  whileHover={{ y: -3, color: "#818CF8" }}
                   whileTap={{ scale: 0.9 }}
-                  className="text-gray-300 hover:text-blue-400 transition-colors"
+                  className="text-gray-400 hover:text-indigo-400 transition-colors"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -80,8 +87,8 @@ const Footer = () => {
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <FaArrowRight className="text-blue-400 text-xs" />
+                  <a href="#" className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center gap-2">
+                    <FaArrowRight className="text-indigo-400 text-xs" />
                     {link}
                   </a>
                 </motion.li>
@@ -99,8 +106,8 @@ const Footer = () => {
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors flex items-center gap-2">
-                    <FaArrowRight className="text-blue-400 text-xs" />
+                  <a href="#" className="text-gray-300 hover:text-indigo-400 transition-colors flex items-center gap-2">
+                    <FaArrowRight className="text-indigo-400 text-xs" />
                     {resource}
                   </a>
                 </motion.li>
@@ -121,16 +128,16 @@ const Footer = () => {
               <motion.input 
                 type="email" 
                 placeholder="Your email address" 
-                className="px-4 py-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-600"
+                className="px-4 py-3 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 border border-gray-700"
                 required
                 whileFocus={{ 
-                  borderColor: "#3B82F6",
-                  boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.3)"
+                  borderColor: "#818CF8",
+                  boxShadow: "0 0 0 3px rgba(129, 140, 248, 0.3)"
                 }}
               />
               <motion.button 
                 type="submit" 
-                className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white px-6 py-3 rounded-lg font-medium shadow-lg"
+                className="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white px-6 py-3 rounded-lg font-medium shadow-lg"
                 whileHover={{ 
                   scale: 1.02,
                   boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.2)"
@@ -148,10 +155,10 @@ const Footer = () => {
 
         {/* Bottom section */}
         <motion.div 
-          className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center"
+          className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center"
           variants={itemVariants}
         >
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
+          <p className="text-gray-500 text-sm mb-4 md:mb-0">
             © {new Date().getFullYear()} InsiderJobs. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center">
@@ -159,13 +166,13 @@ const Footer = () => {
               <motion.a
                 key={index}
                 href="#"
-                className="text-gray-400 hover:text-blue-400 text-sm relative"
+                className="text-gray-500 hover:text-indigo-400 text-sm relative"
                 whileHover={{ scale: 1.05 }}
               >
                 <span className="block relative">
                   {item}
                   <motion.span 
-                    className="absolute left-0 bottom-0 w-0 h-px bg-blue-400"
+                    className="absolute left-0 bottom-0 w-0 h-px bg-indigo-400"
                     whileHover={{ width: "100%" }}
                     transition={{ duration: 0.3 }}
                   />
@@ -176,16 +183,10 @@ const Footer = () => {
               href="https://www.linkedin.com/in/codewithkinu/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-blue-400 text-sm"
+              className="text-gray-500 hover:text-indigo-400 text-sm"
               whileHover={{ scale: 1.05 }}
             >
               Developed by Sahil MD
-            </motion.a>
-            <motion.a
-              href="#"
-              className="text-gray-400 hover:text-blue-400 text-sm"
-              whileHover={{ scale: 1.05 }}
-            >
             </motion.a>
           </div>
         </motion.div>
