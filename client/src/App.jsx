@@ -1,30 +1,38 @@
-import React, {useContext } from 'react'
-import {Route, Routes} from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
-import ApplyJobs from './pages/ApplyJobs'
+import ApplyJob from './pages/ApplyJob'
 import Applications from './pages/Applications'
-import RecuiterLogin from './components/RecuiterLogin'
+import RecruiterLogin from './components/RecruiterLogin'
 import { AppContext } from './context/AppContext'
 import Dashboard from './pages/Dashboard'
 import AddJob from './pages/AddJob'
 import ManageJobs from './pages/ManageJobs'
-import ViewApplication from './pages/ViewApplication'
+import ViewApplications from './pages/ViewApplications'
 import 'quill/dist/quill.snow.css'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const App = () => {
-  const {showRecruiterLogin} = useContext(AppContext)
+
+  const {showRecruiterLogin, companyToken} = useContext(AppContext)
+
   return (
     <div>
-      {
-        showRecruiterLogin && <RecuiterLogin/>
-      }
+      { showRecruiterLogin && <RecruiterLogin/>}
+      <ToastContainer />
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/apply-job/:id' element={<ApplyJobs/>}/>
+        <Route path='/' element={<Home/>} />
+        <Route path='/apply-job/:id' element={<ApplyJob/>}/>
         <Route path='/applications' element={<Applications/>}/>
-        <Route path='/dashboard' element={<Dashboard/>}>
-        <Route path='add-job' element={<AddJob/>}/>
-        <Route path='manage-jobs' element={<ManageJobs/>}/>
-        <Route path='view-applications' element={<ViewApplication/>}/>
+        <Route path='/dashboard' element={<Dashboard />}>
+          {
+            companyToken ? <>
+              <Route path='add-job' element={<AddJob />} />
+              <Route path='manage-jobs' element={<ManageJobs />} />
+              <Route path='view-applications' element={<ViewApplications />} />
+            </> : null
+          }
         </Route>
       </Routes>
     </div>

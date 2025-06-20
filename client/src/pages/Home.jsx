@@ -1,17 +1,19 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
-import AppDownload from '../components/AppDownload'
 import JobListing from '../components/JobListing'
+import AppDownload from '../components/AppDownload'
 import Footer from '../components/Footer'
 
 const Home = () => {
   return (
-    <div>
+    <div className="bg-gray-100">
       <Navbar/>
-      <Hero/>
-      <JobListing/>
-      <AppDownload/>
+      <div className="min-h-screen">
+        <Hero/>
+        <JobListing/>
+        <AppDownload/>
+      </div>
       <Footer/>
     </div>
   )

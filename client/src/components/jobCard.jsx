@@ -19,7 +19,7 @@ const JobCard = ({ job }) => {
     },
     hover: {
       y: -5,
-      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+      boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.25)"
     }
   };
 
@@ -38,65 +38,64 @@ const JobCard = ({ job }) => {
 
   return (
     <motion.div
-      className="relative isolate overflow-hidden border border-gray-700 p-6 rounded-xl bg-gray-800/50 backdrop-blur-sm shadow-lg"
+      className="relative isolate overflow-hidden border border-gray-200 p-8 rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300"
       variants={cardVariants}
       initial="hidden"
       animate="visible"
       whileHover="hover"
     >
-      {/* Background elements matching Hero */}
+      {/* Premium decorative elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden opacity-10">
-        <div className="absolute -top-10 -right-1/2 transform-gpu blur-3xl">
-          <div 
-            className="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff]"
-            style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }}
-          />
-        </div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full filter blur-[80px]"></div>
       </div>
 
-      {/* Original content with animations */}
+      {/* Company logo */}
       <div className='flex justify-between items-center'>
         <motion.img 
-          className='h-8' 
+          className='h-10 w-10 object-contain rounded-lg border border-gray-200 p-1' 
           src={assets.company_icon} 
-          alt=""
+          alt="Company logo"
           whileHover={{ scale: 1.1 }}
           transition={{ type: "spring", stiffness: 400 }}
         />
       </div>
       
+      {/* Job title */}
       <motion.h4 
-        className='font-medium text-xl mt-2 text-white'
-        whileHover={{ color: "#a5b4fc" }} // light indigo on hover
+        className='font-semibold text-xl mt-4 text-gray-900'
+        whileHover={{ color: "#3B82F6" }} // blue-600 on hover
       >
         {job.title}
       </motion.h4>
       
-      <div className='flex items-center gap-3 mt-2 text-xs'>
+      {/* Job tags */}
+      <div className='flex items-center gap-3 mt-4'>
         <motion.span 
-          className='bg-blue-900/30 text-blue-300 px-4 py-1.5 rounded-full'
+          className='bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-sm font-medium'
           whileHover={{ scale: 1.05 }}
         >
           {job.location}
         </motion.span>
         <motion.span 
-          className='bg-red-900/30 text-red-300 px-4 py-1.5 rounded-full'
+          className='bg-purple-50 text-purple-700 px-4 py-1.5 rounded-full text-sm font-medium'
           whileHover={{ scale: 1.05 }}
         >
           {job.level}
         </motion.span>
       </div>
       
+      {/* Job description */}
       <motion.p 
-        className='text-gray-300 text-sm mt-4'
+        className='text-gray-600 mt-5 leading-relaxed'
         dangerouslySetInnerHTML={{ __html: job.description.slice(0,150) }}
-        whileHover={{ color: "#e5e7eb" }} // lighter gray on hover
+        whileHover={{ color: "#4B5563" }} // darker gray on hover
       />
       
-      <div className='mt-4 flex gap-4 text-sm'>
+      {/* Action buttons */}
+      <div className='mt-6 flex gap-4'>
         <motion.button
           onClick={() => { navigate(`/apply-job/${job._id}`); window.scrollTo(0, 0) }}
-          className='bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg'
+          className='bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-2.5 rounded-xl font-medium shadow-md'
           variants={buttonVariants}
           whileHover="hover"
           whileTap="tap"
@@ -105,7 +104,7 @@ const JobCard = ({ job }) => {
         </motion.button>
         <motion.button
           onClick={() => { navigate(`/apply-job/${job._id}`); window.scrollTo(0, 0) }}
-          className='text-gray-300 hover:text-white border border-gray-600 hover:bg-gray-700/50 rounded-lg px-4 py-2'
+          className='text-gray-700 hover:text-blue-600 border border-gray-300 hover:border-blue-300 bg-white hover:bg-blue-50 rounded-xl px-6 py-2.5 font-medium shadow-sm'
           variants={buttonVariants}
           whileHover="hover"
           whileTap="tap"

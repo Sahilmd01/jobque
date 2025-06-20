@@ -1,56 +1,150 @@
 import { createContext, useEffect, useState } from "react";
-import { jobsData } from '../assets/assets'
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 export const AppContext = createContext()
 
 export const AppContextProvider = (props) => {
+
+    const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+    const { user } = useUser()
+    const { getToken } = useAuth()
+
     const [searchFilter, setSearchFilter] = useState({
         title: '',
-        location: '',
+        location: ''
     })
 
-    const [issearched, setIsSearched] = useState(false)
-    const [jobs, setJobs] = useState([]);
+    const [isSearched, setIsSearched] = useState(false)
+
+    const [jobs, setJobs] = useState([])
+
     const [showRecruiterLogin, setShowRecruiterLogin] = useState(false)
 
-    // Function To fetch data
+    const [companyToken, setCompanyToken] = useState(null)
+    const [companyData, setCompanyData] = useState(null)
+
+    const [userData, setUserData] = useState(null)
+    const [userApplications, setUserApplications] = useState([])
+
+    //function to fetch jobs
     const fetchJobs = async () => {
-        setJobs(jobsData)
+        try {
+
+            const { data } = await axios.get(backendUrl + '/api/jobs')
+
+            if (data.success) {
+                setJobs(data.jobs)
+                console.log(data.jobs)
+            } else {
+                toast.error(data.message)
+            }
+
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+    //function to fetch company data
+    const fetchCompanyData = async () => {
+        try {
+
+            const { data } = await axios.get(backendUrl + '/api/company/company', { headers: { token: companyToken } })
+
+            if (data.success) {
+                setCompanyData(data.company)
+                console.log(data)
+            } else {
+                toast.error(data.message)
+            }
+
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+    // Function to Fetch User Data
+    const fetchUserData = async () => {
+        try {
+
+            const token = await getToken();
+
+            const { data } = await axios.get(backendUrl + '/api/users/user',
+                { headers: { Authorization: `Bearer ${token}` } })
+
+            if (data.success) {
+                setUserData(data.user)
+            } else (
+                toast.error(data.message)
+            )
+
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+
+    // Function to Fetch User's Applied Applications
+    const fetchUserApplications = async () => {
+        try {
+
+            const token = await getToken()
+
+            const { data } = await axios.get(backendUrl + '/api/users/applications',
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+            if (data.success) {
+                setUserApplications(data.applications)
+            } else {
+                toast.error(data.message)
+            }
+
+        } catch (error) {
+            toast.error(error.message)
+        }
     }
 
     useEffect(() => {
-        fetchJobs();
+        fetchJobs()
+
+        const storedCompanyToken = localStorage.getItem('companyToken')
+
+        if (storedCompanyToken) {
+            setCompanyToken(storedCompanyToken)
+        }
     }, [])
+
+    // Fetch Company Data if Company Token is Available
+    useEffect(() => {
+        if (companyToken) {
+            fetchCompanyData()
+        }
+    }, [companyToken])
+
+    // Fetch User's Applications & Data if User is Logged In
+    useEffect(() => {
+        if (user) {
+            fetchUserData()
+            fetchUserApplications()
+        }
+    }, [user])
 
     const value = {
         setSearchFilter, searchFilter,
-        setIsSearched, issearched,
-        setJobs, jobs,
-        setShowRecruiterLogin, showRecruiterLogin
+        isSearched, setIsSearched,
+        jobs, setJobs,
+        showRecruiterLogin, setShowRecruiterLogin,
+        companyToken, setCompanyToken,
+        companyData, setCompanyData,
+        backendUrl,
+        userData, setUserData,
+        userApplications, setUserApplications,
+        fetchUserData, fetchUserApplications,
     }
 
-    return (
-        <div className="relative min-h-screen bg-gray-900 overflow-hidden">
-            {/* Background elements matching Hero section */}
-            <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute -top-10 -right-1/2 transform-gpu blur-3xl opacity-10">
-                    <div 
-                        className="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff]"
-                        style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }}
-                    />
-                </div>
-                <div className="absolute -top-52 left-1/2 -translate-x-1/2 transform-gpu blur-3xl opacity-10">
-                    <div 
-                        className="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff]"
-                        style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }}
-                    />
-                </div>
-            </div>
-
-            {/* Context provider with original logic */}
-            <AppContext.Provider value={value}>
-                {props.children}
-            </AppContext.Provider>
-        </div>
-    )
+    return (<AppContext.Provider value={value}>
+        {props.children}
+    </AppContext.Provider>)
 }
