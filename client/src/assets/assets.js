@@ -1,5 +1,6 @@
 //sample date for frontend used in developement
-import logo from "./logo.svg";
+import logo from "./logo.png";
+import jobque_logo from "./jobque_logo.png";
 import search_icon from "./search_icon.svg";
 import company_icon from "./company_icon.svg";
 import microsoft_logo from "./microsoft_logo.svg";
@@ -34,9 +35,12 @@ import lock_icon from './lock_icon.svg'
 import samsung_logo from './samsung_logo.png'
 import adobe_logo from './adobe_logo.png'
 import amazon_logo from './amazon_logo.png'
+import google_logo from './google_logo.png'
+import apple_logo from './apple_logo.svg'
 
 export const assets = {
     logo,
+    jobque_logo,
     search_icon,
     cross_icon,
     upload_area,
@@ -70,7 +74,10 @@ export const assets = {
     lock_icon,
     samsung_logo,
     adobe_logo,
-    amazon_logo
+    amazon_logo,
+    google_logo,
+    apple_logo
+
 }
 
 export const JobCategories = [

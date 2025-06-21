@@ -35,10 +35,10 @@ const Dashboard = () => {
                     >
                         <img 
                             className="w-10 h-10" 
-                            src={assets.hirely} 
-                            alt="Hirely Logo"
+                            src={assets.jobque_logo} 
+                            alt="JobQue Logo"
                         />
-                        <span className='text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden sm:block'>Hirely</span>
+                        <span className='text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden sm:block'>JobQue</span>
                     </motion.div>
                     
                     {companyData && (
