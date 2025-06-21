@@ -162,7 +162,7 @@ const Footer = () => {
           variants={itemVariants}
         >
           <p className="text-gray-500 text-base">
-            © {new Date().getFullYear()} <span className="font-medium text-gray-700">InsiderJobs</span>. All rights reserved.
+            © {new Date().getFullYear()} <span className="font-medium text-gray-700">JobQue</span>. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3 justify-center">
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((item, index) => (
